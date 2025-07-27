@@ -44,7 +44,7 @@ jobs:
         hexo generate
         git config --global user.name "Viewer-027"
         git config --global user.email "3458172015@qq.com"
-        git remote set-url origin https://${secrets.GITHUB}@github.com/Viewer-027/Viewer-027.github.io.git
+        git remote set-url origin https://${{secrets.GITHUB}}@github.com/Viewer-027/Viewer-027.github.io.git
         hexo deploy
 
         
