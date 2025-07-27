@@ -42,10 +42,9 @@ jobs:
       run: |
         hexo clean
         hexo generate
-        git config user.name "Viewer-027"
-        git config user.email "3458172015@qq.com"
+        git config --global user.name "Viewer-027"
+        git config --global user.email "3458172015@qq.com"
         hexo deploy
-
 
         
 
