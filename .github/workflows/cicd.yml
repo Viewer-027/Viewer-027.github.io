@@ -44,6 +44,7 @@ jobs:
         hexo generate
         git config --global user.name "Viewer-027"
         git config --global user.email "3458172015@qq.com"
+        git remote set-url origin https://${secrets.GITHUB}@github.com/Viewer-027/Viewer-027.github.io.git
         hexo deploy
 
         
@@ -67,7 +68,7 @@ jobs:
     #     git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
     #     git push --force --quiet "https://${{ secrets.GITHUB}}@$GITHUB_REPO" master:master
 
-
+#https://${{ secrets.GITHUB}}@github.com/Viewer-027/Viewer-027.github.io
 
 #git push --force --quiet "https://RoYFbFDSfM:${{ secrets.CODING_TOKEN }}@$CODING_REPO" master:master
 #git push --force --quiet "https://yifanzheng:${{ secrets.GITEE_ACCESS_TOKEN }}@$GITEE_REPO" master:master
