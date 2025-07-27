@@ -37,44 +37,31 @@ jobs:
         npm install -g hexo-cli
         npm install
 
-    - name: 配置Git信息
-      run: |
-        # 必须设置用户信息，否则Git提交会失败
-        git config --global user.name "Viewer-027"
-        git config --global user.email "3458172015@qq.com"
-        # 查看当前远程地址（调试用，可保留）
-        git remote -v
-        # 关键步骤：用令牌替换远程地址，确保认证
-        git remote set-url origin https://${{ secrets.GITHUB }}@github.com/Viewer-027/Viewer-027.github.io.git
-        # 再次查看远程地址，确认替换成功（调试用）
-        git remote -v
-    - name: Generate and Deploy
       # 编译 markdown 文件
       run: |
         hexo clean
         hexo generate
-        hexo d
 
         
 
 
-    # - name: Deploy hexo blog
-    #   env: 
-    #     # Github 仓库
-    #     GITHUB_REPO: github.com/Viewer-027/Viewer-027.github.io
-    #   # https://github.com/Viewer-027/Viewer-027.github.io.git
-    #   #   # Coding 仓库
-    #   #   CODING_REPO: e.coding.net/yifanzheng/blogs.git
-    #   #   # Gitee 仓库
-    #   #   GITEE_REPO: gitee.com/yifanzheng/yifangzheng.gitee.io.git
-    #   # # 将编译后的博客文件推送到指定仓库
-    #   run: |
-    #     cd ./public && git init && git add .
-    #     git config user.name "Viewer-027"
-    #     git config user.email "3458172015@qq.com"
-    #     git add .
-    #     git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
-    #     git push --force --quiet "https://${{ secrets.GITHUB}}@$GITHUB_REPO" master:master
+    - name: Deploy hexo blog
+      env: 
+        # Github 仓库
+        GITHUB_REPO: github.com/Viewer-027/Viewer-027.github.io
+      # https://github.com/Viewer-027/Viewer-027.github.io.git
+      #   # Coding 仓库
+      #   CODING_REPO: e.coding.net/yifanzheng/blogs.git
+      #   # Gitee 仓库
+      #   GITEE_REPO: gitee.com/yifanzheng/yifangzheng.gitee.io.git
+      # # 将编译后的博客文件推送到指定仓库
+      run: |
+        cd ./public && git init && git add .
+        git config user.name "Viewer-027"
+        git config user.email "3458172015@qq.com"
+        git add .
+        git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
+        git push --force --quiet "https://${{ secrets.GITHUB}}@$GITHUB_REPO" master:master
 
 #https://${{ secrets.GITHUB}}@github.com/Viewer-027/Viewer-027.github.io
 
