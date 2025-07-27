@@ -104,5 +104,5 @@ theme: butterfly
 deploy:
   type: git
   repo: https://github.com/Viewer-027/Viewer-027.github.io.git
-  branch: main
+  branch: master
   url: https://Viewer-027.github.io/
