@@ -37,24 +37,23 @@ jobs:
         npm install -g hexo-cli
         npm install
 
-      - name: 配置Git信息
-        run: |
-          # 必须设置用户信息，否则Git提交会失败
-          git config --global user.name "Viewer-027"
-          git config --global user.email "3458172015@qq.com"
-          # 查看当前远程地址（调试用，可保留）
-          git remote -v
-          # 关键步骤：用令牌替换远程地址，确保认证
-          git remote set-url origin https://${{ secrets.GITHUB }}@github.com/Viewer-027/Viewer-027.github.io.git
-          # 再次查看远程地址，确认替换成功（调试用）
-          git remote -v
-
-      - name: 构建并部署
-        run: |
-          hexo clean
-          hexo generate
-          # 部署时强制推送（解决可能的冲突）
-          hexo deploy --force
+    - name: 配置Git信息
+      run: |
+        # 必须设置用户信息，否则Git提交会失败
+        git config --global user.name "Viewer-027"
+        git config --global user.email "3458172015@qq.com"
+        # 查看当前远程地址（调试用，可保留）
+        git remote -v
+        # 关键步骤：用令牌替换远程地址，确保认证
+        git remote set-url origin https://${{ secrets.GITHUB }}@github.com/Viewer-027/Viewer-027.github.io.git
+        # 再次查看远程地址，确认替换成功（调试用）
+        git remote -v
+    - name: Generate and Deploy
+      # 编译 markdown 文件
+      run: |
+        hexo clean
+        hexo generate
+        hexo d
 
         
 
