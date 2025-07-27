@@ -38,6 +38,7 @@ jobs:
         npm install
 
       # 编译 markdown 文件
+    - name: clean and generate
       run: |
         hexo clean
         hexo generate
