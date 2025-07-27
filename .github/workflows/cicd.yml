@@ -37,12 +37,17 @@ jobs:
         npm install -g hexo-cli
         npm install
 
-    - name: Generate files
+    - name: Generate and Deploy
       # 编译 markdown 文件
       run: |
         hexo clean
         hexo generate
+        git config user.name "Viewer-027"
+        git config user.email "3458172015@qq.com"
         hexo deploy
+
+
+        
 
 
     # - name: Deploy hexo blog
