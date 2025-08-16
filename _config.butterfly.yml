@@ -45,8 +45,8 @@ code_blocks:
 
 ## img setting
 avatar:
-  img: /img/avatar.png
+  img: https://evan-peng.oss-cn-hangzhou.aliyuncs.com/202508162253978.png
   effect: false # 頭像會一直轉圈
 
-index_img: /img/dm2.webp
-default_top_img: /img/dm5.png
+index_img: https://evan-peng.oss-cn-hangzhou.aliyuncs.com/202508031720074.webp
+default_top_img: https://evan-peng.oss-cn-hangzhou.aliyuncs.com/202508162251535.png
