@@ -1,0 +1,219 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Pod 提供 https 服务 | Viewer</title><meta name="author" content="Viewer-027"><meta name="copyright" content="Viewer-027"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="创建tls目录后续存放私钥文件、证书 1[root@master ~]# mkdir tls  生成私钥 1[root@master ~]# openssl genrsa -out tls&#x2F;cert.key 2048  openssl genrsa：使用 OpenSSL 工具生成 RSA 类型的私钥。-out tls&#x2F;cert.key：将生成的私钥保存为 tls&#x2F;cert.key 文件。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pod 提供 https 服务">
+<meta property="og:url" content="https://viewer-027.github.io/2025/08/16/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8F%8A%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/pod%E6%8F%90%E4%BE%9Bhttps/index.html">
+<meta property="og:site_name" content="Viewer">
+<meta property="og:description" content="创建tls目录后续存放私钥文件、证书 1[root@master ~]# mkdir tls  生成私钥 1[root@master ~]# openssl genrsa -out tls&#x2F;cert.key 2048  openssl genrsa：使用 OpenSSL 工具生成 RSA 类型的私钥。-out tls&#x2F;cert.key：将生成的私钥保存为 tls&#x2F;cert.key 文件。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://evan-peng.oss-cn-hangzhou.aliyuncs.com/202508162253978.png">
+<meta property="article:published_time" content="2025-08-16T15:01:27.983Z">
+<meta property="article:modified_time" content="2025-08-16T15:01:27.983Z">
+<meta property="article:author" content="Viewer-027">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://evan-peng.oss-cn-hangzhou.aliyuncs.com/202508162253978.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Pod 提供 https 服务",
+  "url": "https://viewer-027.github.io/2025/08/16/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8F%8A%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/pod%E6%8F%90%E4%BE%9Bhttps/",
+  "image": "https://evan-peng.oss-cn-hangzhou.aliyuncs.com/202508162253978.png",
+  "datePublished": "2025-08-16T15:01:27.983Z",
+  "dateModified": "2025-08-16T15:01:27.983Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Viewer-027",
+      "url": "https://viewer-027.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://viewer-027.github.io/2025/08/16/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8F%8A%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/pod%E6%8F%90%E4%BE%9Bhttps/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Pod 提供 https 服务',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://evan-peng.oss-cn-hangzhou.aliyuncs.com/202508162253978.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas   fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 系列</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://evan-peng.oss-cn-hangzhou.aliyuncs.com/202508162251535.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Viewer</span></a><a class="nav-page-title" href="/"><span class="site-name">Pod 提供 https 服务</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas   fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 系列</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Pod 提供 https 服务</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-08-16T15:01:27.983Z" title="发表于 2025-08-16 23:01:27">2025-08-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-16T15:01:27.983Z" title="更新于 2025-08-16 23:01:27">2025-08-16</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>创建tls目录后续存放私钥文件、证书</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# <span class="built_in">mkdir</span> tls</span><br></pre></td></tr></table></figure>
+
+<p>生成私钥</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# openssl genrsa -out tls/cert.key 2048</span><br></pre></td></tr></table></figure>
+
+<p><code>openssl genrsa</code>：使用 OpenSSL 工具生成 RSA 类型的私钥。<br><code>-out tls/cert.key</code>：将生成的私钥保存为 tls&#x2F;cert.key 文件。<br>2048：表示密钥长度为 2048 位，这是目前推荐的安全强度。</p>
+<p>生成自签名证书（Self-signed Certificate）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# openssl req -new -x509 -key tls/cert.key -out tls/cert.crt \</span><br><span class="line">                       -subj <span class="string">&quot;/C=CN/ST=BJ/L=BJ/O=Tedu/OU=NSD/CN=localhost&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>🔹 openssl req<br>表示你要生成一个 X.509 证书请求（CSR）或直接生成证书。<br>🔹 -new<br>表示生成一个新的证书请求（这里配合 -x509 使用，直接生成证书）。<br>🔹 -x509<br>表示直接输出一个 自签名证书，而不是 CSR（证书签名请求）。<br>🔹 -key tls&#x2F;cert.key<br>指定使用的私钥文件，即上一步生成的 cert.key。<br>🔹 -out tls&#x2F;cert.crt<br>输出证书文件路径为 tls&#x2F;cert.crt。<br>🔹 -subj “&#x2F;C&#x3D;CN&#x2F;ST&#x3D;BJ&#x2F;L&#x3D;BJ&#x2F;O&#x3D;Tedu&#x2F;OU&#x3D;NSD&#x2F;CN&#x3D;localhost”</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>C</code></td>
+<td>Country（国家代码）</td>
+<td>CN &#x3D; China</td>
+</tr>
+<tr>
+<td><code>ST</code></td>
+<td>State（省份）</td>
+<td>BJ &#x3D; Beijing</td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td>Locality（城市）</td>
+<td>BJ &#x3D; Beijing</td>
+</tr>
+<tr>
+<td><code>O</code></td>
+<td>Organization（组织名）</td>
+<td>Tedu（公司或单位名称）</td>
+</tr>
+<tr>
+<td><code>OU</code></td>
+<td>Organizational Unit（部门）</td>
+<td>NSD（网络服务部）</td>
+</tr>
+<tr>
+<td><code>CN</code></td>
+<td>Common Name（通用名）</td>
+<td>localhost（域名或主机名）</td>
+</tr>
+</tbody></table>
+<p>创建secret、pod</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# kubectl create secret generic webcert --from-file=tls</span><br><span class="line"><span class="comment"># 导出 secret 资源对象文件</span></span><br><span class="line">[root@master ~]# kubectl get secrets webcert -o yaml |<span class="built_in">tee</span> webcert.yaml</span><br><span class="line">[root@master ~]# vim web.yaml</span><br><span class="line">  ---</span><br><span class="line">  apiVersion: v1</span><br><span class="line">  kind: Pod</span><br><span class="line">  metadata:</span><br><span class="line">  name: web</span><br><span class="line">  spec:</span><br><span class="line">  terminationGracePeriodSeconds: 0</span><br><span class="line">  restartPolicy: Always</span><br><span class="line">  containers:</span><br><span class="line">  - name: nginx</span><br><span class="line">    image: myos:nginx</span><br><span class="line">  [root@master ~]# kubectl apply –f web.yaml</span><br><span class="line">  pod/web created</span><br></pre></td></tr></table></figure>
+
+<p>修改nginx.conf启用https</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@master ~]# kubectl <span class="built_in">cp</span> web:/usr/local/nginx/conf/nginx.conf nginx.conf</span><br><span class="line">[root@master ~]# vim nginx.conf</span><br><span class="line">... ...</span><br><span class="line">    server &#123;</span><br><span class="line">        listen       443 ssl;</span><br><span class="line">        server_name  localhost;</span><br><span class="line">        ssl_certificate      tls/cert.crt;  <span class="comment">#指定证书文件路径</span></span><br><span class="line">        ssl_certificate_key  tls/cert.key;  <span class="comment">#指定私钥文件路径</span></span><br><span class="line">        ssl_session_cache    shared:SSL:1m; <span class="comment">#共享内存缓存区大小</span></span><br><span class="line">        ssl_session_timeout  5m;  <span class="comment">#SSL会话缓存的有效时间</span></span><br><span class="line">        ssl_ciphers  HIGH:!aNULL:!MD5; <span class="comment">#使用高强度加密算法 ！禁用</span></span><br><span class="line">        ssl_prefer_server_ciphers  on; <span class="comment">#优先选择加密套件</span></span><br><span class="line">        location / &#123;</span><br><span class="line">            root   html;</span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">... ...</span><br></pre></td></tr></table></figure>
+
+<p>nginx.conf、tls做临时挂载</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用命令创建 configMap</span></span><br><span class="line">[root@master ~]# kubectl create configmap nginx-ssl --from-file=nginx.conf</span><br><span class="line">configmap/nginx-ssl created</span><br><span class="line">[root@master ~]# vim web.yaml</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: web</span><br><span class="line">spec:</span><br><span class="line">  terminationGracePeriodSeconds: 0</span><br><span class="line">  restartPolicy: Always</span><br><span class="line">  volumes:</span><br><span class="line">  - name: webconf</span><br><span class="line">    configMap:</span><br><span class="line">      name: nginx-ssl</span><br><span class="line">  - name: ssl</span><br><span class="line">    secret:</span><br><span class="line">      secretName: webcert</span><br><span class="line">      items:</span><br><span class="line">      - key: cert.key</span><br><span class="line">        path: cert.key</span><br><span class="line">        mode: 0400</span><br><span class="line">      - key: cert.crt</span><br><span class="line">        path: cert.crt</span><br><span class="line">        mode: 0444</span><br><span class="line">  containers:</span><br><span class="line">  - name: nginx</span><br><span class="line">    image: myos:nginx</span><br><span class="line">    volumeMounts:</span><br><span class="line">    - name: webconf</span><br><span class="line">      subPath: nginx.conf</span><br><span class="line">      mountPath: /usr/local/nginx/conf/nginx.conf</span><br><span class="line">    - name: ssl   <span class="comment">## 将secret中的所有挂载到tls</span></span><br><span class="line">      mountPath: /usr/local/nginx/conf/tls</span><br><span class="line">      readOnly: <span class="literal">true</span></span><br><span class="line">[root@master ~]# kubectl replace --force -f web.yaml</span><br><span class="line">pod <span class="string">&quot;web&quot;</span> deleted</span><br><span class="line">pod/web created</span><br><span class="line">[root@master ~]# kubectl get pods -o wide</span><br><span class="line">NAME   READY   STATUS    RESTARTS   AGE     IP              NODE</span><br><span class="line">Web    1/1     Running   0           8s      10.244.1.19    node-0001</span><br><span class="line">[root@master ~]# curl -k https://10.244.1.19</span><br><span class="line">Nginx is running !  <span class="comment">#-k 忽略ssl验证</span></span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://viewer-027.github.io">Viewer-027</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://viewer-027.github.io/2025/08/16/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8F%8A%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/pod%E6%8F%90%E4%BE%9Bhttps/">https://viewer-027.github.io/2025/08/16/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8F%8A%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/pod%E6%8F%90%E4%BE%9Bhttps/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://viewer-027.github.io" target="_blank">Viewer</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://evan-peng.oss-cn-hangzhou.aliyuncs.com/202508162253978.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/08/16/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8F%8A%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/Hexo/" title="HEXO + GitHub CICD 部署个人博客"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">HEXO + GitHub CICD 部署个人博客</div></div><div class="info-2"><div class="info-item-1">参考博客：(18 封私信) 使用 GitHub Actions 自动部署 Hexo 博客到 GitHub Pages - 知乎 如何正确的使用 GitHub Actions 实现 Hexo 博客的 CICD | 喵了个咪 下载配置node123456789101112131415161718192021wget https://nodejs.org/dist/v18.20.3/node-v18.20.3-linux-x64.tar.xztar -xvJf node-v18.20.3-linux-x64.tar.xzln -s /root/node-v18.20.3-linux-x64/bin/node /usr/local/bin/nodeln -s /root/node-v18.20.3-linux-x64/bin/npm /usr/local/bin/npmvim /etc/profileexport NODE_HOME=/root/node-v18.20.3-linux-x64/bin/export...</div></div></div></a><a class="pagination-related" href="/2025/08/16/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8F%8A%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/wordpress/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">docker快速部署wordpresshttps://www.cnblogs.com/pzy-Albert/p/18391693 docker制作wordpress镜像容器12345678# 创建dockerfile目录[root@docker02 ~]# mkdir /Dockerfile# 进入dockerfile目录[root@docker02 ~]# cd /Dockerfile# 编写Docker File[root@docker02 Dockerfile]# vim Dockerfile  1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162FROM myos:yum-linux# 安装依赖库和工具RUN yum -y update &amp;&amp; \    yum -y install epel-release &amp;&amp; \    yum -y install wget...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://evan-peng.oss-cn-hangzhou.aliyuncs.com/202508162253978.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Viewer-027</div><div class="author-info-description">欢迎来到Viewer的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Viewer-027" target="_blank" title="Github"><i class="fab fa-github" style="color: #hdhfbb;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%951/" title="面试1">面试1</a><time datetime="2025-08-16T15:01:27.984Z" title="发表于 2025-08-16 23:01:27">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E9%9D%A2%E8%AF%95/%E9%9D%A2%E8%AF%952/" title="面试2">面试2</a><time datetime="2025-08-16T15:01:27.984Z" title="发表于 2025-08-16 23:01:27">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8F%8A%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/pod%E6%8F%90%E4%BE%9Bhttps/" title="Pod 提供 https 服务">Pod 提供 https 服务</a><time datetime="2025-08-16T15:01:27.983Z" title="发表于 2025-08-16 23:01:27">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8F%8A%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/wordpress/" title="无标题">无标题</a><time datetime="2025-08-16T15:01:27.983Z" title="发表于 2025-08-16 23:01:27">2025-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/16/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8F%8A%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/%E5%89%A7%E6%9C%AC%E8%AE%B0%E5%BD%95/" title="剧本记录">剧本记录</a><time datetime="2025-08-16T15:01:27.983Z" title="发表于 2025-08-16 23:01:27">2025-08-16</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Viewer-027</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
