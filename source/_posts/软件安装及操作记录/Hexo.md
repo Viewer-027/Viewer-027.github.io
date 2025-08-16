@@ -2,8 +2,6 @@
 title: HEXO + GitHub CICD 部署个人博客
 ---
 
-
-
 ### 参考博客：
 
 [(18 封私信) 使用 GitHub Actions 自动部署 Hexo 博客到 GitHub Pages - 知乎](https://zhuanlan.zhihu.com/p/161969042)
@@ -31,7 +29,7 @@ source /etc/profile
 node -v
 npm -v
 
-echo 'export PATH=$PATH:/root/node-v18.20.3-linux-x64/node_golbal/bin' >> ~/.bashrc 
+echo 'export PATH=$PATH:/root/node-v18.20.3-linux-x64/node_golbal/bin' >> ~/.bashrc
 
 source ~/.bashrc
 ```
